@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ag-sweldo tay manen kasin!!!</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 15px;
+        text-align: center;
+    }
+    .container {
+        max-width: 380px;
+        margin: 0 auto;
+		background-color: #f9f9f9;
+		padding: 15px;
+        border-radius: 10px;	
+        box-shadow: 0 0 10px rgba(0,0,0,.5);
+    }
+    .input-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1px; /* Increased margin to separate input groups */
+    }
+    .input-group label {
+        flex: 4;
+        text-align: left;
+        margin-right: 20px;
+    }
+    .input-group .count-box {
+        display: flex;
+        align-items: center;
+    }
+    .count-box button {
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 9px 11px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px; /* Font size for buttons */
+    }
+    .count-box button:hover {
+        background-color: #ccc; /* Lighter shade on hover */
+    }
+    .count-box input[type="number"] {
+        width: 70px;
+        padding: 9px;
+        margin: 0 5px;
+		border: 1px solid #ccc;
+        text-align: center;
+        font-size: 16px; /* Font size for input fields */
+    }
+    button {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 4px auto; /* Center the button */
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .paycheck-summary {
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        margin-top: 5px;
+    }
+    .paycheck-summary h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .result {
+        text-align: left;
+        padding-top: 10px;
+        border-top: 1px solid #ccc;
+    }
+    .result p {
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .result strong {
+        display: inline-block;
+        width: 1000px; /* Adjust as needed for longer labels */
+        text-align: right;
+        margin-right: 10px;
+    }
+    .result span {
+        display: inline-block;
+        width: calc(100% - 10px); /* Adjust as needed based on label width */
+        text-align: left;
+    }
+    h2 {
+        margin-bottom: 0;
+    }
+    .sub-title {
+        font-weight: normal;
+        margin-top: 3px;
+        margin-bottom: 15px;
+        }
+        /* GROSS Salary */
+        .result p:nth-of-type(1) span {
+            font-weight: bold;
+            color: black;
+        }
+        /* SSS */
+        .result p:nth-of-type(2) span {
+            font-weight: normal;
+            color: black; /* Changed color to black */
+        }
+        /* Pag-ibig */
+        .result p:nth-of-type(3) span {
+            font-weight: normal;
+            color: black; /* Changed color to black */
+        }
+        /* PhilHealth */
+        .result p:nth-of-type(4) span {
+            font-weight: normal;
+            color: black; /* Changed color to black */
+        }
+        /* total-deduction */
+        .result p:nth-of-type(5) span {
+            font-weight: bold;
+            color: red;
+        }
+        /* NET salary */
+        .result p:nth-of-type(6) span {
+            font-weight: bold;
+            color: black;
+        }
+    /* Blink animation */
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .blink {
+        animation: blink 0.25s;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>DaKASINS</h2>
+    <div class="sub-title">Paycheck Calculator v2024.07.13</div>
+    <form onsubmit="event.preventDefault(); calculateSalary();">
+        <div class="input-group">
+            <label for="days">Number of days worked:</label>
+            <div class="count-box">
+                <button type="button" onclick="decrementDays()">-</button>
+                <input type="number" id="days" name="days" class="input-field" value="10" step="1">
+                <button type="button" onclick="incrementDays()">+</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="rate">Rate per day (PHP):</label>
+            <div class="count-box">
+                <button type="button" onclick="decrementRate()">-</button>
+                <input type="number" id="rate" name="rate" class="input-field" value="550" step=".01">
+                <button type="button" onclick="incrementRate()">+</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="sss">SSS Contribution (%):</label>
+            <div class="count-box">
+                <button type="button" onclick="decrementSSS()">-</button>
+                <input type="number" id="sss" name="sss" class="input-field" value="4.5" step="0.1">
+                <button type="button" onclick="incrementSSS()">+</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="pagibig">Pag-ibig Contribution (%):</label>
+            <div class="count-box">
+                <button type="button" onclick="decrementPagibig()">-</button>
+                <input type="number" id="pagibig" name="pagibig" class="input-field" value="3.0" step="0.1">
+                <button type="button" onclick="incrementPagibig()">+</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="philhealth">PhilHealth Contribution:</label>
+            <div class="count-box">
+                <button type="button" onclick="decrementPhilhealth()">-</button>
+                <input type="number" id="philhealth" name="philhealth" class="input-field" value="112.50" step="0.50">
+                <button type="button" onclick="incrementPhilhealth()">+</button>
+            </div>
+        </div>
+        <button type="submit">Calculate NET salary</button>
+    </form>
+
+    <div class="paycheck-summary">
+        <h3>Paycheck Summary</h3>
+        <div class="result">
+            <p><span>Gross Salary:</span> <span id="grosssalary"></span></p>
+            <p><span id="sssLabel">SSS (4.5%):</span> <span id="sssDeduction"></span></p>
+            <p><span id="pagibigLabel">Pag-ibig (3.0%):</span> <span id="pagibigDeduction"></span></p>
+            <p><span>PhilHealth (Fxd):</span> <span id="philhealthAmount"></span></p>
+            <p><span>Total deduction:</span> <span id="totalDeduction"></span></p>
+            <p><span>NET Salary:</span> <span id="netSalary"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateSalary() {
+            // Get input values
+            var daysWorked = parseInt(document.getElementById('days').value);
+            var ratePerDay = parseFloat(document.getElementById('rate').value);
+            var sssContribution = parseFloat(document.getElementById('sss').value);
+            var pagibigContribution = parseFloat(document.getElementById('pagibig').value);
+            var philhealthAmount = parseFloat(document.getElementById('philhealth').value);
+
+            // Determine the bracket for SSS deduction
+            var grossSalary = (daysWorked * ratePerDay).toFixed(2);
+            var bracket;
+            if (grossSalary < 4250) {
+                bracket = 4000;
+            } else if (grossSalary >= 4250 && grossSalary < 4750) {
+                bracket = 4500;
+            } else if (grossSalary >= 4750 && grossSalary < 5250) {
+                bracket = 5000;
+            } else if (grossSalary >= 5250 && grossSalary < 5750) {
+                bracket = 5500;
+            } else if (grossSalary >= 5750 && grossSalary < 6250) {
+                bracket = 6000;
+            } else if (grossSalary >= 6250 && grossSalary < 6750) {
+                bracket = 6500;
+            } else if (grossSalary >= 6750 && grossSalary < 7250) {
+                bracket = 7000;
+            } else if (grossSalary >= 7250 && grossSalary < 7750) {
+                bracket = 7500;
+            } else if (grossSalary >= 7750 && grossSalary < 8250) {
+                bracket = 8000;
+            } else if (grossSalary >= 8250 && grossSalary < 8750) {
+                bracket = 8500;
+            } else if (grossSalary >= 8750 && grossSalary < 9250) {
+                bracket = 9000;
+            } else if (grossSalary >= 9250 && grossSalary < 9750) {
+                bracket = 9500;
+            } else if (grossSalary >= 9750 && grossSalary < 10250) {
+                bracket = 10000;
+            } else if (grossSalary >= 10250 && grossSalary < 10750) {
+                bracket = 10500;
+            } else if (grossSalary >= 10750 && grossSalary < 11250) {
+                bracket = 11000;
+            } else if (grossSalary >= 11250 && grossSalary < 11750) {
+                bracket = 11500;
+            } else if (grossSalary >= 11750 && grossSalary < 12250) {
+                bracket = 12000;
+            } else if (grossSalary >= 12250 && grossSalary < 12750) {
+                bracket = 12500;
+            } else if (grossSalary >= 12750 && grossSalary < 13250) {
+                bracket = 13000;
+            } else if (grossSalary >= 13250 && grossSalary < 13750) {
+                bracket = 13500;
+            } else if (grossSalary >= 13750 && grossSalary < 14250) {
+                bracket = 14000;
+            } else if (grossSalary >= 14250 && grossSalary < 14750) {
+                bracket = 14500;
+            } else if (grossSalary >= 14750 && grossSalary < 15250) {
+                bracket = 15000;
+            } else if (grossSalary >= 15250 && grossSalary < 15750) {
+                bracket = 15500;
+            } else if (grossSalary >= 15750 && grossSalary < 16250) {
+                bracket = 16000;
+            } else if (grossSalary >= 16250 && grossSalary < 16750) {
+                bracket = 16500;
+            } else if (grossSalary >= 16750 && grossSalary < 17250) {
+                bracket = 17000;
+            } else if (grossSalary >= 17250 && grossSalary < 17750) {
+                bracket = 17500;
+            } else if (grossSalary >= 17750 && grossSalary < 18250) {
+                bracket = 18000;
+            } else if (grossSalary >= 18250 && grossSalary < 18750) {
+                bracket = 18500;
+            } else if (grossSalary >= 18750 && grossSalary < 19250) {
+                bracket = 19000;
+            } else if (grossSalary >= 19250 && grossSalary < 19750) {
+                bracket = 19500;
+            } else if (grossSalary >= 19750 && grossSalary < 20250) {
+                bracket = 20000;
+            } else if (grossSalary >= 20250 && grossSalary < 20750) {
+                bracket = 20000;
+            } else if (grossSalary >= 20750 && grossSalary < 21250) {
+                bracket = 20000;
+            } else if (grossSalary >= 21250 && grossSalary < 21750) {
+                bracket = 20000;
+            } else if (grossSalary >= 21750 && grossSalary < 22250) {
+                bracket = 20000;
+            } else if (grossSalary >= 22250 && grossSalary < 22750) {
+                bracket = 20000;
+            } else if (grossSalary >= 22750 && grossSalary < 23250) {
+                bracket = 20000;
+            } else if (grossSalary >= 23250 && grossSalary < 23750) {
+                bracket = 20000;
+            } else if (grossSalary >= 23750 && grossSalary < 24250) {
+                bracket = 20000;
+            } else if (grossSalary >= 24250 && grossSalary < 24750) {
+                bracket = 20000;
+            } else if (grossSalary >= 24750 && grossSalary < 25250) {
+                bracket = 20000;
+            } else if (grossSalary >= 25250 && grossSalary < 25750) {
+                bracket = 20000;
+            } else if (grossSalary >= 25750 && grossSalary < 26250) {
+                bracket = 20000;
+            } else if (grossSalary >= 26250 && grossSalary < 26750) {
+                bracket = 20000;
+            } else if (grossSalary >= 26750 && grossSalary < 27250) {
+                bracket = 20000;
+            } else if (grossSalary >= 27250 && grossSalary < 27750) {
+                bracket = 20000;
+            } else if (grossSalary >= 27750 && grossSalary < 28250) {
+                bracket = 20000;
+            } else if (grossSalary >= 28250 && grossSalary < 28750) {
+                bracket = 20000;
+            } else if (grossSalary >= 28750 && grossSalary < 29250) {
+                bracket = 20000;
+            } else if (grossSalary >= 29250 && grossSalary < 29750) {
+                bracket = 20000;
+            } else {
+                bracket = 20000;
+            }
+
+            var sssDeduction = ((bracket * (sssContribution / 100)).toFixed(2));
+            var pagibigDeduction = ((grossSalary * (pagibigContribution / 100)).toFixed(2));
+            var totalPhilhealth = philhealthAmount.toFixed(2);
+            var totalDeduction = (parseFloat(sssDeduction) + parseFloat(pagibigDeduction) + parseFloat(totalPhilhealth)).toFixed(2);
+            var netSalary = (grossSalary - totalDeduction).toFixed(2);
+
+            // Display results with blinking effect
+            blinkResults();
+
+            // Update results
+            document.getElementById('grosssalary').textContent = 'PHP ' + grossSalary;
+            document.getElementById('sssDeduction').textContent = 'PHP ' + sssDeduction;
+            document.getElementById('pagibigDeduction').textContent = 'PHP ' + pagibigDeduction;
+            document.getElementById('philhealthAmount').textContent = 'PHP ' + totalPhilhealth;
+            document.getElementById('totalDeduction').textContent = 'PHP ' + totalDeduction;
+            document.getElementById('netSalary').textContent = 'PHP ' + netSalary;
+
+            // Update labels
+            updateSSSLabel();
+            updatePagibigLabel();
+        }
+
+        function blinkResults() {
+            var results = document.querySelectorAll('.result span');
+            results.forEach(function(result) {
+                result.classList.add('blink');
+            });
+            setTimeout(function() {
+                results.forEach(function(result) {
+                    result.classList.remove('blink');
+                });
+            }, 250);
+        }
+
+        function updateSSSLabel() {
+            var sssContribution = parseFloat(document.getElementById('sss').value);
+            document.getElementById('sssLabel').textContent = 'SSS (' + sssContribution.toFixed(1) + '%):';
+        }
+
+        function updatePagibigLabel() {
+            var pagibigContribution = parseFloat(document.getElementById('pagibig').value);
+            document.getElementById('pagibigLabel').textContent = 'Pag-ibig (' + pagibigContribution.toFixed(1) + '%):';
+        }
+
+        function incrementDays() {
+            var daysInput = document.getElementById('days');
+            var currentValue = parseInt(daysInput.value);
+            daysInput.value = currentValue + 1;
+        }
+
+        function decrementDays() {
+            var daysInput = document.getElementById('days');
+            var currentValue = parseInt(daysInput.value);
+            if (currentValue > 1) {
+                daysInput.value = currentValue - 1;
+            }
+        }
+
+        function incrementRate() {
+            var rateInput = document.getElementById('rate');
+            var currentValue = parseInt(rateInput.value);
+            rateInput.value = currentValue + 10;
+        }
+
+        function decrementRate() {
+            var rateInput = document.getElementById('rate');
+            var currentValue = parseInt(rateInput.value);
+            if (currentValue > 10) {
+                rateInput.value = currentValue - 10;
+            }
+        }
+
+        function incrementSSS() {
+            var sssInput = document.getElementById('sss');
+            var currentValue = parseFloat(sssInput.value);
+            sssInput.value = (currentValue + 0.1).toFixed(1);
+        }
+
+        function decrementSSS() {
+            var sssInput = document.getElementById('sss');
+            var currentValue = parseFloat(sssInput.value);
+            if (currentValue > 0) {
+                sssInput.value = (currentValue - 0.1).toFixed(1);
+            }
+        }
+
+        function incrementPagibig() {
+            var pagibigInput = document.getElementById('pagibig');
+            var currentValue = parseFloat(pagibigInput.value);
+            pagibigInput.value = (currentValue + 0.1).toFixed(1);
+        }
+
+        function decrementPagibig() {
+            var pagibigInput = document.getElementById('pagibig');
+            var currentValue = parseFloat(pagibigInput.value);
+            if (currentValue > 0) {
+                pagibigInput.value = (currentValue - 0.1).toFixed(1);
+            }
+        }
+
+        function incrementPhilhealth() {
+            var philhealthInput = document.getElementById('philhealth');
+            var currentValue = parseFloat(philhealthInput.value);
+            philhealthInput.value = (currentValue + 0.50).toFixed(2);
+        }
+
+        function decrementPhilhealth() {
+            var philhealthInput = document.getElementById('philhealth');
+            var currentValue = parseFloat(philhealthInput.value);
+            if (currentValue > 0) {
+                philhealthInput.value = (currentValue - 0.50).toFixed(2);
+            }
+        }
+
+        // Initial update of labels
+        updateSSSLabel();
+        updatePagibigLabel();
+    </script>
+</body>
+</html>
